@@ -16,6 +16,7 @@
 # Creators / Devs : ben007.tux AT gmail DOT com & linuxmasterjedi AT free DOT fr
 # Any problem : do not hesitate to contact us via email
 
+
 ######################
 # Requirement 
    - You must have the same architecture between the SAP server and the Hobbit server 
@@ -26,8 +27,8 @@
    
 ######################
 # Installation
-  1/ Get binary from SAP : checkmySAP needs 2 binaries from SAP. 
-     We are looking for 'lgtst' and 'rfcping' (should be in '/usr/sap/SID/FOOBAR/exe/')
+  1/ Get binary from SAP : checkmySAP needs 3 binaries from SAP. 
+     We are looking for 'lgtst', 'rfcping' and 'startrfc' (should be in '/usr/sap/SID/FOOBAR/exe/')
      Find them on your SAP server and put it in '${BBHOME}/ext/checkmySAP/bin/'
      Make them executable (chmod) and owned by the Hobbit user (chown)
      
@@ -48,18 +49,23 @@
   4/ Edit the configuration file '${BBHOME}/ext/checkmySAP/checkmySAP.ini' according to 
      your needs. There are extra information on the header of 'checkmySAP.ini'.
      Example :
-        ## Options for the rfcping command ##
-        # Function,hostname,r3name,mshost,user,passwd,client,group
-        rcfping,sapserver01,DEV,sapserver01,usersap,userpasswd,600,MYLOGONGROUP
-        ## Options for the lgtst command ##
-        # Function,hostname,name,mshost,msserv
-        lgtst,sapserver01,DEV,sapserver01,sapmsDEV
+		## Options for the rfcping command ##
+		# fonction,machine,r3name,mshost,user,passwd,client,group
+		rcfping,sapserver01,PRD,sapserver01,usersap,userpasswd,600,MYLOGONGROUP
+
+		## Options for the lgtst command ##
+		# fonction,machine,name,mshost,msserv
+		lgtst,sapserver01,PRD,sapserver01,sapmsDEV
+
+		## Options for the startrfc command ##
+		# fonction,machine,CI Host,SID,Logon group,username,password,client,language,number of machine in the logon group
+		startrfc,sapserver01,PRD,MYLOGONGROUP,usersap,userpasswd,600,F,3
      
   5/ Edit your '${BBHOME}/etc/bb-hosts' and add the keyword 'SAP' on host you want to monitor
      The host must have the same name in the 'checkmySAP.ini' & 'bb-hosts'
         0.0.0.0  sapserver01   # conn ssh SAP    NAME:"SAP Server 01" CLIENT:sapserver01.my.domain
      
-  6/ Et voil‡, the 'SAP' icon should appear in less then 5min.
+  6/ Et voil√†, the 'SAP' icon should appear in less then 5min.
   
   
    
