@@ -1,0 +1,65 @@
+#       This program is free software; you can redistribute it and/or modify
+#       it under the terms of the GNU General Public License as published by
+#       the Free Software Foundation; either version 2 of the License, or
+#       (at your option) any later version.
+#       
+#       This program is distributed in the hope that it will be useful,
+#       but WITHOUT ANY WARRANTY; without even the implied warranty of
+#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#       GNU General Public License for more details.
+#       
+#       You should have received a copy of the GNU General Public License
+#       along with this program; if not, write to the Free Software
+#       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#       MA 02110-1301, USA.
+
+# Creators / Devs : ben007.tux AT gmail DOT com & linuxmasterjedi AT free DOT fr
+# Any problem : do not hesitate to contact us via email
+
+######################
+# Requirement 
+   - You must have the same architecture between the SAP server and the Hobbit server 
+     (Linux x64_64 for example). This Hobbit extension uses some SAP binaries who can 
+      not been provided with this extension...
+   - A generic user in SAP (service account) for remote check
+   - A Hobbit server running ;)
+   
+######################
+# Installation
+  1/ Get binary from SAP : checkmySAP needs 2 binaries from SAP. 
+     We are looking for 'lgtst' and 'rfcping' (should be in '/usr/sap/SID/FOOBAR/exe/')
+     Find them on your SAP server and put it in '${BBHOME}/ext/checkmySAP/bin/'
+     Make them executable (chmod) and owned by the Hobbit user (chown)
+     
+  2/ Those binaries needs 3 extra libraries also in '/usr/sap/SID/FOOBAR/exe/' :
+        libicudata.so.30
+        libicuuc.so.30
+        libicui18n.so.30
+     And put them is '${BBHOME}/ext/checkmySAP/lib/'
+     
+  3/ In your 'hobbitlaunch.cfg' : add those lines
+        [SAP]
+            ENVFILE /PATH/TO/HOBBIT/server/etc/hobbitserver.cfg
+            NEEDS hobbitd
+            CMD $BBHOME/ext/checkmySAP/checkmySAP.sh
+            LOGFILE $BBSERVERLOGS/checkmySAP.log
+            INTERVAL 5m
+            
+  4/ Edit the configuration file '${BBHOME}/ext/checkmySAP/checkmySAP.ini' according to 
+     your needs. There are extra information on the header of 'checkmySAP.ini'.
+     Example :
+        ## Options for the rfcping command ##
+        # Function,hostname,r3name,mshost,user,passwd,client,group
+        rcfping,sapserver01,DEV,sapserver01,usersap,userpasswd,600,MYLOGONGROUP
+        ## Options for the lgtst command ##
+        # Function,hostname,name,mshost,msserv
+        lgtst,sapserver01,DEV,sapserver01,sapmsDEV
+     
+  5/ Edit your '${BBHOME}/etc/bb-hosts' and add the keyword 'SAP' on host you want to monitor
+     The host must have the same name in the 'checkmySAP.ini' & 'bb-hosts'
+        0.0.0.0  sapserver01   # conn ssh SAP    NAME:"SAP Server 01" CLIENT:sapserver01.my.domain
+     
+  6/ Et voilà, the 'SAP' icon should appear in less then 5min.
+  
+  
+   
