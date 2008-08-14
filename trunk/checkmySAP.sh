@@ -33,7 +33,7 @@
   ###################################
   # Pre-Run tests
 
-  # Is checkmySAP.ini is around ?
+  # Is checkmySAP.ini around ?
   if [ ! -e ${INIFILEPATH} ]; then
       echo -e "\n\r\t/!\ checkmySAP.ini is not present. It should be in ${INIFILEPATH}.\n\r"
       exit 1
